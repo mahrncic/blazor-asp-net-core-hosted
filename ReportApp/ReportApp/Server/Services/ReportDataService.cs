@@ -1,4 +1,4 @@
-﻿using ReportApp.Shared;
+﻿using ReportApp.Shared.Models;
 
 namespace ReportApp.Server.Services;
 

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using ReportApp.Server.Hubs;
-using ReportApp.Server.Models.Settings;
 using ReportApp.Server.Services;
+using ReportApp.Shared.Models.Settings;
 
 namespace ReportApp.Server.Workers;
 

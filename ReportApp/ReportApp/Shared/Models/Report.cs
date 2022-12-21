@@ -1,4 +1,4 @@
-namespace ReportApp.Shared;
+namespace ReportApp.Shared.Models;
 
 public class Report
 {

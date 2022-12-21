@@ -1,4 +1,4 @@
-﻿namespace ReportApp.Server.Models.Settings;
+﻿namespace ReportApp.Shared.Models.Settings;
 
 public class HostedServiceSettings
 {

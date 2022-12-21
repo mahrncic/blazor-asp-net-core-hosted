@@ -1,6 +1,10 @@
 ﻿@page "/reports"
+@using Microsoft.AspNetCore.SignalR.Client;
+@using Microsoft.Extensions.Options;
 @using ReportApp.Shared
-@inject HttpClient Http
+@using ReportApp.Shared.Models;
+@using ReportApp.Shared.Models.Settings;
+@inject IOptions<HostedServiceSettings> _hostedServiceOptions
 
 <PageTitle>Reports</PageTitle>
 
@@ -34,10 +38,43 @@ else
 }
 
 @code {
-    private Report[]? reports;
+    private List<Report>? reports;
+    private HostedServiceSettings? _hostedServiceSettings;
+    private HubConnection? _reportDataHubConnection;
 
     protected override async Task OnInitializedAsync()
     {
-        
+        SetSettingsValues();
+        await StartHubConnection();
+        RefreshFloorData();
+    }
+
+    private void SetSettingsValues()
+    {
+        _hostedServiceSettings = _hostedServiceOptions.Value;
+    }
+
+    private async Task StartHubConnection()
+    {
+        var sensorDataUrl = ($"{_hostedServiceSettings!.BaseAddress}{_hostedServiceSettings!.Uri}");
+        _reportDataHubConnection = new HubConnectionBuilder()
+                        .WithUrl(sensorDataUrl)
+                        .Build();
+
+        await _reportDataHubConnection.StartAsync();
+        if (_reportDataHubConnection.State == HubConnectionState.Connected)
+            Console.WriteLine("SignalR Connection started");
+    }
+
+    private void RefreshFloorData()
+    {
+        _reportDataHubConnection!.On<List<Report>>(_hostedServiceSettings!.MethodName, (data) =>
+        {
+            Console.WriteLine(
+                string.Format("Report data fetched", DateTime.Now));
+
+            reports = data;
+            StateHasChanged();
+        });
     }
 }

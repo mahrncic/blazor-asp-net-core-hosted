@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using ReportApp.Shared;
+using ReportApp.Shared.Models;
 
 namespace ReportApp.Server.Hubs;
 
