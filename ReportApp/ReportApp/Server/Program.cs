@@ -31,9 +31,6 @@ app.UseRouting();
 
 app.MapControllers();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapHub<ReportHub>("/reports");
-});
+app.MapHub<ReportHub>("/reports");
 
 app.Run();
