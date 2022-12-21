@@ -42,7 +42,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         await StartHubConnection();
-        RefreshReportData();
+        SetRefreshDataListener();
     }
 
     private async Task StartHubConnection()
@@ -55,11 +55,9 @@ else
                         .Build();
 
         await _reportDataHubConnection.StartAsync();
-        if (_reportDataHubConnection.State == HubConnectionState.Connected)
-            Console.WriteLine("SignalR Connection started");
     }
 
-    private void RefreshReportData()
+    private void SetRefreshDataListener()
     {
         var methodName = "TransferReportData";
 
