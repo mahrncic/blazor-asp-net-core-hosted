@@ -19,11 +19,11 @@ public class TimeWorker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        using var scope = _serviceProvider.CreateScope();
-        var reportDataService = scope.ServiceProvider.GetRequiredService<IReportDataService>();
-
         while (!stoppingToken.IsCancellationRequested)
         {
+            using var scope = _serviceProvider.CreateScope();
+            var reportDataService = scope.ServiceProvider.GetRequiredService<IReportDataService>();
+
             var reportData = await reportDataService.GetReports();
             var methodName = "TransferReportData";
 
