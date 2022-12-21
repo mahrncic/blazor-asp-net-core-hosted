@@ -47,7 +47,7 @@ else
 
     private async Task StartHubConnection()
     {
-        var apiAddress = "https://localhost:7077/";
+        var apiAddress = "https://localhost:7077";
 
         var sensorDataUrl = ($"{apiAddress}/reports");
         _reportDataHubConnection = new HubConnectionBuilder()
