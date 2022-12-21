@@ -3,8 +3,6 @@
 @using Microsoft.Extensions.Options;
 @using ReportApp.Shared
 @using ReportApp.Shared.Models;
-@using ReportApp.Shared.Models.Settings;
-@inject IOptions<HostedServiceSettings> _hostedServiceOptions
 
 <PageTitle>Reports</PageTitle>
 
@@ -39,24 +37,19 @@ else
 
 @code {
     private List<Report>? reports;
-    private HostedServiceSettings? _hostedServiceSettings;
     private HubConnection? _reportDataHubConnection;
 
     protected override async Task OnInitializedAsync()
     {
-        SetSettingsValues();
         await StartHubConnection();
-        RefreshFloorData();
-    }
-
-    private void SetSettingsValues()
-    {
-        _hostedServiceSettings = _hostedServiceOptions.Value;
+        RefreshReportData();
     }
 
     private async Task StartHubConnection()
     {
-        var sensorDataUrl = ($"{_hostedServiceSettings!.BaseAddress}{_hostedServiceSettings!.Uri}");
+        var apiAddress = "https://localhost:7077/";
+
+        var sensorDataUrl = ($"{apiAddress}/reports");
         _reportDataHubConnection = new HubConnectionBuilder()
                         .WithUrl(sensorDataUrl)
                         .Build();
@@ -66,13 +59,12 @@ else
             Console.WriteLine("SignalR Connection started");
     }
 
-    private void RefreshFloorData()
+    private void RefreshReportData()
     {
-        _reportDataHubConnection!.On<List<Report>>(_hostedServiceSettings!.MethodName, (data) =>
-        {
-            Console.WriteLine(
-                string.Format("Report data fetched", DateTime.Now));
+        var methodName = "TransferReportData";
 
+        _reportDataHubConnection!.On<List<Report>>(methodName, (data) =>
+        {
             reports = data;
             StateHasChanged();
         });
